@@ -12,7 +12,7 @@ namespace _1A2B
 {
     public partial class Form1 : Form
     {
-        List<int> number;
+        string number = "";
         public Form1()
         {
             InitializeComponent();
@@ -24,17 +24,15 @@ namespace _1A2B
         private void button1_Click(object sender, EventArgs e)
         {
             Random ran = new Random();
-            List<int> tmp = new List<int>();
             for(int i = 0;i<4;)
             {
                 int num = ran.Next(0, 10);
-                if(!tmp.Contains(num))
+                if(!number.Contains(Convert.ToString(num)))
                 {
-                    tmp.Add(num);
+                    number += num.ToString();
                     i++;
                 }
             }
-            number = tmp;
             button1.Enabled = false;
             button2.Enabled = true;
             button3.Enabled = true;
@@ -53,27 +51,13 @@ namespace _1A2B
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (textBox1.Text.Length == number.Count)
-            {
-                string num = textBox1.Text;
-                int A = 0;
-                int B = 0;
-                for (int i = 0; i < number.Count; i++)
-                {
-                    if (number[i] == int.Parse(num[i].ToString()))
-                    {
-                        A += 1;
-                    }
-                    else
-                    {
-                        if (number.Contains(int.Parse(num[i].ToString())))
-                        {
-                            B += 1;
-                        }
-                    }
-                }
-                textBox2.Text += num + " : " + A + "A" + B + "B\n";
-            }
+            int A = 0, B = 0;
+            var s = textBox1.Text;
+            var compare = s.Intersect(number).ToList();
+            A = compare.Where(x => number.IndexOf(x) == s.IndexOf(x)).Count();
+            B = compare.Count - A;
+            textBox2.Text += s + " : " + A + "A" + B + "B\n";
+            textBox1.Text = "";
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -84,7 +68,7 @@ namespace _1A2B
             button4.Enabled = false;
             textBox2.Text = "";
             textBox1.Text = "";
-            number = new List<int>();
+            number = "";
         }
     }
 }
